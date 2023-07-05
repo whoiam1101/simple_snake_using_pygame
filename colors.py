@@ -1,5 +1,9 @@
-SCREEN_BACKGROUN_COLOR = "black"
+SCREEN_BACKGROUN_COLOR = "white"
 
 SNAKE_COLOR = "green"
+HEAD_COLOR = "blue"
+DEAD_COLOR = "red"
 
-FOOD_COLOR = "white"
+BORDER_COLOR = "black"
+
+FOOD_COLOR = "orange"
