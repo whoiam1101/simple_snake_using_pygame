@@ -15,6 +15,10 @@ from constants import (
 from functions import random_position, move, draw, place_food, colinear_dirs
 from enums import MoveResult
 
+from constants import BEST_SCORE
+from settings import set_value
+from quit import quit
+
 
 def game() -> None:
     # pygame.init()
@@ -26,7 +30,7 @@ def game() -> None:
     direction: tuple[int, int]
     dead: bool
     directions_queue: list[tuple[int, int]]
-    running = True
+    running: bool = True
     score: int
     score_increment: int = 1
 
@@ -84,10 +88,11 @@ def game() -> None:
 
         if dead:
             pygame.time.wait(DEAD_INTERVAL())
+            if score > BEST_SCORE():
+                set_value("BEST_SCORE", score)
             fill_initials()
         elif spent_time < MOVE_INTERVAL():
             pygame.time.wait(MOVE_INTERVAL() - spent_time)
 
 
-    pygame.quit()
-    exit()
+    quit()

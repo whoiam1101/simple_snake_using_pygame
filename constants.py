@@ -17,8 +17,11 @@ CELL_SIZE   = lambda: get_value('CELL_SIZE')
 GRID_WIDTH  = lambda: get_value('GRID_WIDTH')
 GRID_HEIGHT = lambda: get_value('GRID_HEIGHT')
 
+BEST_SCORE = lambda: get_value('BEST_SCORE')
+
 SCREEN_WIDTH  = lambda: CELL_SIZE() * GRID_WIDTH()
 SCREEN_HEIGHT = lambda: CELL_SIZE() * GRID_HEIGHT()
 
-SCORE_TEXT_SIZE  = lambda: CELL_SIZE()
-WIDGET_TEXT_SIZE = lambda: CELL_SIZE() // 2
+SCORE_TEXT_SIZE      = lambda: CELL_SIZE()
+WIDGET_TEXT_SIZE     = lambda: CELL_SIZE() // 2
+BEST_SCORE_TEXT_SIZE = lambda: CELL_SIZE() * 2
