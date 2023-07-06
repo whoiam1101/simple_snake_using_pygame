@@ -7,7 +7,8 @@ from game import game
 
 
 def quit() -> None:
-    pygame_menu.events.EXIT
+    pygame.quit()
+    exit()
 
 
 pygame.init()
