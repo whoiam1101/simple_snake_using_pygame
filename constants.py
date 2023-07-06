@@ -1,11 +1,24 @@
-MOVE_INTERVAL = 123
-DEAD_INTERVAL = 1500
+import json
 
-CELL_SIZE = 32
-GRID_WIDTH = 18
-GRID_HEIGHT = 18
 
-SCREEN_WIDTH  = CELL_SIZE * GRID_WIDTH
-SCREEN_HEIGHT = CELL_SIZE * GRID_HEIGHT
+CONSTANTS_FILE: str = "constants.json"
 
-SCORE_TEXT_SIZE = 20
+
+def get_value(key: str) -> int:
+    with open(CONSTANTS_FILE, 'r') as constant_file:
+        constant: dict[str, int] = json.load(constant_file)
+        return constant[key]
+
+
+MOVE_INTERVAL = lambda: get_value('MOVE_INTERVAL')
+DEAD_INTERVAL = lambda: get_value('DEAD_INTERVAL')
+
+CELL_SIZE   = lambda: get_value('CELL_SIZE')
+GRID_WIDTH  = lambda: get_value('GRID_WIDTH')
+GRID_HEIGHT = lambda: get_value('GRID_HEIGHT')
+
+SCREEN_WIDTH  = lambda: CELL_SIZE() * GRID_WIDTH()
+SCREEN_HEIGHT = lambda: CELL_SIZE() * GRID_HEIGHT()
+
+SCORE_TEXT_SIZE  = lambda: CELL_SIZE()
+WIDGET_TEXT_SIZE = lambda: CELL_SIZE() // 2

@@ -1,0 +1,7 @@
+{
+    "MOVE_INTERVAL" : 123,
+    "DEAD_INTERVAL" : 1500,
+    "CELL_SIZE"     : 32,
+    "GRID_WIDTH"    : 18,
+    "GRID_HEIGHT"   : 18
+}
