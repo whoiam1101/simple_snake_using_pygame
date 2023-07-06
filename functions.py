@@ -3,7 +3,7 @@ from pygame.locals import Rect
 from pygame.draw import rect
 from pygame import Surface
 
-from colors import SNAKE_COLOR, FOOD_COLOR, SCREEN_BACKGROUN_COLOR, HEAD_COLOR, BORDER_COLOR, DEAD_COLOR
+from colors import SNAKE_COLOR, FOOD_COLOR, SCREEN_BACKGROUND_COLOR, HEAD_COLOR, BORDER_COLOR, DEAD_COLOR
 from enums import MoveResult
 
 
@@ -38,7 +38,7 @@ def move(grid_width: int, grid_height: int, snake_cells: list[tuple[int, int]], 
 
 
 def draw(screen:Surface, snake_cells: list[tuple[int, int]], food: tuple[int, int], cell_size: int, dead: bool) -> None:
-    screen.fill(SCREEN_BACKGROUN_COLOR)
+    screen.fill(SCREEN_BACKGROUND_COLOR)
     n = len(snake_cells)
     snake_color = SNAKE_COLOR
     head_color = HEAD_COLOR
