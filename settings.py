@@ -12,15 +12,15 @@ from theme import theme
 
 def set_value(key: str, value: int) -> None:
     # read
-    with open(CONSTANTS_FILE, 'r') as constant_file:
+    with open(CONSTANTS_FILE, 'r', encoding='utf-8') as constant_file:
         constant: dict[str, int] = json.load(constant_file)
 
     # change
     constant[key] = value
 
     # write
-    with open(CONSTANTS_FILE, 'w') as constant_file:
-        json.dump(constant, constant_file)
+    with open(CONSTANTS_FILE, 'w', encoding='utf-8') as constant_file:
+        json.dump(constant, constant_file, ensure_ascii=False, indent=4)
 
 
 def set_difficulty(selected_difficulty: tuple[str, int], *args, **kwargs) -> None:

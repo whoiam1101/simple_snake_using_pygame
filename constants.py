@@ -5,7 +5,7 @@ CONSTANTS_FILE: str = "constants.json"
 
 
 def get_value(key: str) -> int:
-    with open(CONSTANTS_FILE, 'r') as constant_file:
+    with open(CONSTANTS_FILE, 'r', encoding='utf-8') as constant_file:
         constant: dict[str, int] = json.load(constant_file)
         return constant[key]
 
