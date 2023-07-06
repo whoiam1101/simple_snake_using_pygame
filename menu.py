@@ -1,7 +1,7 @@
 import pygame
 import pygame_menu
 
-from colors import SCREEN_BACKGROUN_COLOR
+from colors import SCREEN_BACKGROUND_COLOR
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from game import game
 
@@ -14,8 +14,8 @@ pygame.init()
 screen: pygame.Surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
-menu_theme: pygame_menu.Theme = pygame_menu.Theme(background_color=SCREEN_BACKGROUN_COLOR,
-                                                  border_color=SCREEN_BACKGROUN_COLOR,
+menu_theme: pygame_menu.Theme = pygame_menu.Theme(background_color=SCREEN_BACKGROUND_COLOR,
+                                                  border_color=SCREEN_BACKGROUND_COLOR,
                                                   cursor_color="green",
                                                   selection_color="green",
                                                   title=False,
