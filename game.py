@@ -19,8 +19,8 @@ from enums import MoveResult
 def game() -> None:
     # pygame.init()
     pygame.font.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE)
+    screen = pygame.display.set_mode((SCREEN_WIDTH(), SCREEN_HEIGHT()))
+    font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE())
     snake_cells: list[tuple[int, int]]
     food: tuple[int, int]
     direction: tuple[int, int]
@@ -33,8 +33,8 @@ def game() -> None:
 
     def fill_initials() -> None:
         nonlocal snake_cells, food, direction, dead, directions_queue, score
-        snake_cells = [random_position(GRID_WIDTH - 1, GRID_HEIGHT - 1)]
-        food = place_food(GRID_WIDTH - 1, GRID_HEIGHT - 1, snake_cells)
+        snake_cells = [random_position(GRID_WIDTH() - 1, GRID_HEIGHT() - 1)]
+        food = place_food(GRID_WIDTH() - 1, GRID_HEIGHT() - 1, snake_cells)
         direction = (0, 0)
         dead = False
         score = 0
@@ -66,15 +66,15 @@ def game() -> None:
             direction = directions_queue[0]
             directions_queue = directions_queue[1:]
 
-        next_cells, move_result = move(GRID_WIDTH, GRID_HEIGHT, snake_cells, direction, food)
+        next_cells, move_result = move(GRID_WIDTH(), GRID_HEIGHT(), snake_cells, direction, food)
         snake_cells = next_cells
         if move_result == MoveResult.ATE_FOOD:
             score += score_increment
-            food = place_food(GRID_WIDTH - 1, GRID_HEIGHT - 1, snake_cells)
+            food = place_food(GRID_WIDTH() - 1, GRID_HEIGHT() - 1, snake_cells)
         elif move_result == MoveResult.HIT_TAIL or move_result == MoveResult.HIT_BORDER:
             dead = True
 
-        draw(screen, snake_cells, food, CELL_SIZE, dead)
+        draw(screen, snake_cells, food, CELL_SIZE(), dead)
         score_text = font.render(f'{score}', True, SCORE_TEXT_COLOR)
         screen.blit(score_text, (10, 10))
         pygame.display.flip()
@@ -83,10 +83,10 @@ def game() -> None:
         spent_time = end_time - start_time
 
         if dead:
-            pygame.time.wait(DEAD_INTERVAL)
+            pygame.time.wait(DEAD_INTERVAL())
             fill_initials()
-        elif spent_time < MOVE_INTERVAL:
-            pygame.time.wait(MOVE_INTERVAL - spent_time)
+        elif spent_time < MOVE_INTERVAL():
+            pygame.time.wait(MOVE_INTERVAL() - spent_time)
 
 
     pygame.quit()
