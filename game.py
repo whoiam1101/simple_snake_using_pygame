@@ -1,27 +1,43 @@
 import pygame
+from pygame_menu.font import FONT_8BIT
 
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, CELL_SIZE, GRID_WIDTH, GRID_HEIGHT, MOVE_INTERVAL, DEAD_INTERVAL
+from colors import SCORE_TEXT_COLOR
+from constants import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    CELL_SIZE,
+    GRID_WIDTH,
+    GRID_HEIGHT,
+    MOVE_INTERVAL,
+    DEAD_INTERVAL,
+    SCORE_TEXT_SIZE
+)
 from functions import random_position, move, draw, place_food, colinear_dirs
 from enums import MoveResult
 
 
 def game() -> None:
     # pygame.init()
+    pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE)
     snake_cells: list[tuple[int, int]]
     food: tuple[int, int]
     direction: tuple[int, int]
     dead: bool
     directions_queue: list[tuple[int, int]]
     running = True
+    score: int
+    score_increment: int = 1
 
 
     def fill_initials() -> None:
-        nonlocal snake_cells, food, direction, dead, directions_queue
+        nonlocal snake_cells, food, direction, dead, directions_queue, score
         snake_cells = [random_position(GRID_WIDTH - 1, GRID_HEIGHT - 1)]
         food = place_food(GRID_WIDTH - 1, GRID_HEIGHT - 1, snake_cells)
         direction = (0, 0)
         dead = False
+        score = 0
         directions_queue = []
 
 
@@ -53,11 +69,14 @@ def game() -> None:
         next_cells, move_result = move(GRID_WIDTH, GRID_HEIGHT, snake_cells, direction, food)
         snake_cells = next_cells
         if move_result == MoveResult.ATE_FOOD:
+            score += score_increment
             food = place_food(GRID_WIDTH - 1, GRID_HEIGHT - 1, snake_cells)
         elif move_result == MoveResult.HIT_TAIL or move_result == MoveResult.HIT_BORDER:
             dead = True
 
         draw(screen, snake_cells, food, CELL_SIZE, dead)
+        score_text = font.render(f'{score}', True, SCORE_TEXT_COLOR)
+        screen.blit(score_text, (10, 10))
         pygame.display.flip()
 
         end_time = pygame.time.get_ticks()
