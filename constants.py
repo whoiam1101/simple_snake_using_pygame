@@ -6,11 +6,11 @@ CONSTANTS_FILE: str = "constants.json"
 
 INITIAL_CONSTANTS: dict[str, int] = {
     "MOVE_INTERVAL": 300,
-    "DEAD_INTERVAL": 1500,
     "CELL_SIZE":     32,
     "GRID_WIDTH":    14,
     "GRID_HEIGHT":   14,
-    "BEST_SCORE":    0
+    "BEST_SCORE":    0,
+    "FPS":           60
 }
 
 
@@ -27,13 +27,14 @@ def get_value(key: str) -> int:
 
 
 MOVE_INTERVAL = lambda: get_value('MOVE_INTERVAL')
-DEAD_INTERVAL = lambda: get_value('DEAD_INTERVAL')
 
 CELL_SIZE   = lambda: get_value('CELL_SIZE')
 GRID_WIDTH  = lambda: get_value('GRID_WIDTH')
 GRID_HEIGHT = lambda: get_value('GRID_HEIGHT')
 
 BEST_SCORE = lambda: get_value('BEST_SCORE')
+
+FPS = lambda: get_value('FPS')
 
 SCREEN_WIDTH  = lambda: CELL_SIZE() * GRID_WIDTH()
 SCREEN_HEIGHT = lambda: CELL_SIZE() * GRID_HEIGHT()
