@@ -4,10 +4,26 @@ import json
 CONSTANTS_FILE: str = "constants.json"
 
 
+INITIAL_CONSTANTS: dict[str, int] = {
+    "MOVE_INTERVAL": 300,
+    "DEAD_INTERVAL": 1500,
+    "CELL_SIZE":     32,
+    "GRID_WIDTH":    14,
+    "GRID_HEIGHT":   14,
+    "BEST_SCORE":    0
+}
+
+
 def get_value(key: str) -> int:
-    with open(CONSTANTS_FILE, 'r', encoding='utf-8') as constant_file:
-        constant: dict[str, int] = json.load(constant_file)
-        return constant[key]
+    try:
+        with open(CONSTANTS_FILE, 'r', encoding='utf-8') as constant_file:
+            constant: dict[str, int] = json.load(constant_file)
+            return constant[key]
+    except FileNotFoundError:
+        with open(CONSTANTS_FILE, 'w+', encoding='utf-8') as constant_file:
+            json.dump(INITIAL_CONSTANTS, constant_file, ensure_ascii=False, indent=4)
+
+        return get_value(key)
 
 
 MOVE_INTERVAL = lambda: get_value('MOVE_INTERVAL')
