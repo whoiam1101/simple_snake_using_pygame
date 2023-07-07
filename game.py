@@ -1,7 +1,7 @@
 import pygame
 from pygame_menu.font import FONT_8BIT
 
-from colors import SCORE_TEXT_COLOR
+from colors import SCORE_TEXT_COLOR, SCREEN_BACKGROUND_COLOR
 from constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
@@ -9,15 +9,15 @@ from constants import (
     GRID_WIDTH,
     GRID_HEIGHT,
     MOVE_INTERVAL,
-    DEAD_INTERVAL,
-    SCORE_TEXT_SIZE
+    SCORE_TEXT_SIZE,
+    FPS,
 )
-from functions import random_position, move, draw, place_food, colinear_dirs
-from enums import MoveResult
 
 from constants import BEST_SCORE
 from settings import set_value
 from quit import quit
+from snake import Snake
+
 
 
 def game() -> None:
@@ -25,30 +25,18 @@ def game() -> None:
     pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH(), SCREEN_HEIGHT()))
     font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE())
-    snake_cells: list[tuple[int, int]]
-    food: tuple[int, int]
-    direction: tuple[int, int]
-    dead: bool
-    directions_queue: list[tuple[int, int]]
     running: bool = True
-    score: int
     score_increment: int = 1
 
+    fps = FPS()
+    cell_size = CELL_SIZE()
+    move_interval = MOVE_INTERVAL()
 
-    def fill_initials() -> None:
-        nonlocal snake_cells, food, direction, dead, directions_queue, score
-        snake_cells = [random_position(GRID_WIDTH() - 1, GRID_HEIGHT() - 1)]
-        food = place_food(GRID_WIDTH() - 1, GRID_HEIGHT() - 1, snake_cells)
-        direction = (0, 0)
-        dead = False
-        score = 0
-        directions_queue = []
+    clock = pygame.time.Clock()
 
-
-    fill_initials()
+    snake = Snake(GRID_WIDTH(), GRID_HEIGHT(), screen, cell_size)
 
     while running:
-        start_time = pygame.time.get_ticks()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -56,43 +44,22 @@ def game() -> None:
 
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_LEFT, pygame.K_a):
-                    directions_queue.append((-1, 0))
+                    snake.push_direction((-1, 0))
                 if event.key in (pygame.K_RIGHT, pygame.K_d):
-                    directions_queue.append((1, 0))
+                    snake.push_direction((1, 0))
                 if event.key in (pygame.K_UP, pygame.K_w):
-                    directions_queue.append((0, -1))
+                    snake.push_direction((0, -1))
                 if event.key in (pygame.K_DOWN, pygame.K_s):
-                    directions_queue.append((0, 1))
+                    snake.push_direction((0, 1))
 
-        while len(directions_queue) > 0 and colinear_dirs(direction, directions_queue[0]):
-            directions_queue = directions_queue[1:]
-        if len(directions_queue) > 0:
-            direction = directions_queue[0]
-            directions_queue = directions_queue[1:]
+        percent = clock.tick(fps) / move_interval
+         
+        snake.tick(percent)
 
-        next_cells, move_result = move(GRID_WIDTH(), GRID_HEIGHT(), snake_cells, direction, food)
-        snake_cells = next_cells
-        if move_result == MoveResult.ATE_FOOD:
-            score += score_increment
-            food = place_food(GRID_WIDTH() - 1, GRID_HEIGHT() - 1, snake_cells)
-        elif move_result == MoveResult.HIT_TAIL or move_result == MoveResult.HIT_BORDER:
-            dead = True
-
-        draw(screen, snake_cells, food, CELL_SIZE(), dead)
-        score_text = font.render(f'{score}', True, SCORE_TEXT_COLOR)
+        screen.fill(SCREEN_BACKGROUND_COLOR)
+        snake.draw()
+        score_text = font.render(f'{snake.score}', True, SCORE_TEXT_COLOR)
         screen.blit(score_text, (10, 10))
         pygame.display.flip()
-
-        end_time = pygame.time.get_ticks()
-        spent_time = end_time - start_time
-
-        if dead:
-            pygame.time.wait(DEAD_INTERVAL())
-            if score > BEST_SCORE():
-                set_value("BEST_SCORE", score)
-            fill_initials()
-        elif spent_time < MOVE_INTERVAL():
-            pygame.time.wait(MOVE_INTERVAL() - spent_time)
-
 
     quit()
