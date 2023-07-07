@@ -46,7 +46,7 @@ def set_grid_size(selected_value: tuple[tuple[str, str], int], *args, **kwargs) 
 
 
 def selectorValuesMap(vals: list[str]) -> list[tuple[str, str]]:
-    return list(map(lambda s : (s, s), vals))
+    return [(s, s) for s in vals]
 
 POSSIBLE_DIFFICULTY_VALUES: list[str] = selectorValuesMap(["EASY", "MEDIUM", "HARD", "VERY HARD", "IMMPOSSIBLE"])
 POSSIBLE_CELL_SIZE_VALUES:  list[str] = selectorValuesMap(["8", "16", "32", "48", "64"])
