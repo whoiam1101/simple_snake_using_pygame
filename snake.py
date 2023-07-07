@@ -18,6 +18,21 @@ FOOD_COLOR2 = Color(255, 0, 255)
 
 CELL_MAX_PROGRESS = 75
 FOOD_MAX_PROGRESS = 30
+BACKGROUND_MAX_PROGRESS = 20
+
+def colorsGrid(width: int, height: int) -> list[list[tuple[Color, Color]]]:
+    grid: list[list[tuple[Color, Color]]] = [[0 for j in range(0, height)] for i in range(0, width)]
+    for x in range(0, width):
+        for y in range(0, height):
+            r, g, b = randint(191, 215), randint(191, 215), randint(191, 215)
+            r1 = r + randint(0, 40)
+            g1 = g + randint(0, 40)
+            b1 = b + randint(0, 40)
+            r2 = r + randint(0, 40)
+            g2 = g + randint(0, 40)
+            b2 = b + randint(0, 40)
+            grid[x][y] = (Color(r1, g1, b1), Color(r2, g2, b2))
+    return grid
 
 def colorCalc(c1: Color, c2: Color, percent: int) -> Color:
     if percent > 1:
@@ -117,6 +132,8 @@ class Snake:
         self.progress = 0
         self.dead_acc = 0
         self.score = 0
+        self.background_acc = 0
+        self.colors_grid = colorsGrid(self.grid_width, self.grid_height)
         self.food = Food.place(self.grid_width, self.grid_height, self.cells)
         self.direction = (0, 0)
         self.directions_queue = []
@@ -128,6 +145,7 @@ class Snake:
         for cell in self.cells:
             cell.tick(percent)
         self.food.tick(percent)
+        self.background_acc = (self.background_acc + percent) % BACKGROUND_MAX_PROGRESS
         if self.dead_acc > 0:
             self.dead_acc -= percent
             if self.dead_acc <= 0:
@@ -174,6 +192,12 @@ class Snake:
         nextCell(self.cells[n - 1], nexthead)
         return MoveResult.OK
     def draw(self) -> None:
+        for x in range(0, self.grid_width):
+            for y in range(0, self.grid_height):
+                dx = x * self.cell_size
+                dy = y * self.cell_size
+                color = colorCalc(self.colors_grid[x][y][0], self.colors_grid[x][y][1], self.background_acc / BACKGROUND_MAX_PROGRESS * 2)
+                rect(self.screen, color, Rect(dx, dy, self.cell_size, self.cell_size))
         self.food.draw(self.progress, self.screen, self.cell_size)
         for cell in self.cells:
             cell.draw(self.progress, self.isdead(), self.screen, self.cell_size)
