@@ -49,7 +49,7 @@ def selectorValuesMap(vals: list[str]) -> list[tuple[str, str]]:
     return list(map(lambda s : (s, s), vals))
 
 POSSIBLE_DIFFICULTY_VALUES: list[str] = selectorValuesMap(["EASY", "MEDIUM", "HARD", "VERY HARD", "IMMPOSSIBLE"])
-POSSIBLE_CELL_SIZE_VALUES:  list[str] = selectorValuesMap(["8", "16", "32", "64"])
+POSSIBLE_CELL_SIZE_VALUES:  list[str] = selectorValuesMap(["8", "16", "32", "48", "64"])
 POSSIBLE_GRID_SIZE_VALUES:  list[str] = selectorValuesMap(list(map(str, range(10, 21))))
 
 

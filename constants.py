@@ -5,10 +5,10 @@ CONSTANTS_FILE: str = "constants.json"
 
 
 INITIAL_CONSTANTS: dict[str, int] = {
-    "MOVE_INTERVAL": 300,
+    "MOVE_INTERVAL": 123,
     "CELL_SIZE":     32,
-    "GRID_WIDTH":    14,
-    "GRID_HEIGHT":   14,
+    "GRID_WIDTH":    16,
+    "GRID_HEIGHT":   16,
     "BEST_SCORE":    0,
     "FPS":           60
 }
