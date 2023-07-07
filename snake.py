@@ -1,8 +1,31 @@
 from random import randint
+from math import floor
 from enum import Enum
-from pygame import Surface, Rect
+from pygame import Surface, Rect, Color
 from pygame.draw import rect
-from colors import SNAKE_COLOR, FOOD_COLOR, SCREEN_BACKGROUND_COLOR, HEAD_COLOR, BORDER_COLOR, DEAD_COLOR
+
+BORDER_COLOR = "black"
+
+DEAD_COLOR = "red"
+
+SNAKE_COLOR1 = Color(0, 255, 0)
+SNAKE_COLOR2 = Color(0, 0, 255)
+HEAD_COLOR1 = Color(105, 76, 2)
+HEAD_COLOR2 = Color(77, 1, 8)
+
+FOOD_COLOR1 = Color(255, 127, 0)
+FOOD_COLOR2 = Color(255, 0, 255)
+
+CELL_MAX_PROGRESS = 75
+FOOD_MAX_PROGRESS = 30
+
+def colorCalc(c1: Color, c2: Color, percent: int) -> Color:
+    if percent > 1:
+        percent = 2 - percent
+    def f(v1: int, v2: int) -> int:
+        return floor(v1 + (v2 - v1) * percent)
+    r, g, b = f(c1.r, c2.r), f(c1.g, c2.g), f(c1.b, c2.b)
+    return Color(r, g, b)
 
 class MoveResult(Enum):
     OK = 0
@@ -21,6 +44,10 @@ class Cell:
             self.fromx = x
             self.fromy = y
         self.ishead = False
+        self.progress = 0
+    def tick(self, percent: int) -> None:
+        self.progress += percent
+        self.progress %= CELL_MAX_PROGRESS
     def coords(self, progress: int = 1) -> tuple[int, int]:
         x = (self.x - self.fromx) * progress + self.fromx
         y = (self.y - self.fromy) * progress + self.fromy
@@ -32,11 +59,12 @@ class Cell:
         x *= cell_size
         y *= cell_size
         rect(screen, BORDER_COLOR, Rect(x, y, cell_size, cell_size))
-        color = SNAKE_COLOR
         if isdead:
             color = DEAD_COLOR
         elif self.ishead:
-            color = HEAD_COLOR
+            color = colorCalc(HEAD_COLOR1, HEAD_COLOR2, self.progress / CELL_MAX_PROGRESS * 2)
+        else:
+            color = colorCalc(SNAKE_COLOR1, SNAKE_COLOR2, self.progress / CELL_MAX_PROGRESS * 2)
         rect(screen, color, Rect(x + 1, y + 1, cell_size - 2, cell_size - 2))
     @classmethod
     def random(Cell, grid_width: int, grid_height: int):
@@ -52,6 +80,10 @@ class Food:
     def __init__(self, x: int = 0, y: int = 0) -> None:
         self.x = x
         self.y = y
+        self.progress = 0
+    def tick(self, percent: int) -> None:
+        self.progress += percent
+        self.progress %= FOOD_MAX_PROGRESS
     def iseaten(self, snake_cells: list[Cell]) -> bool:
         return any(self.equal(cell) for cell in snake_cells)
     def equal(self, cell: Cell) -> bool:
@@ -59,7 +91,8 @@ class Food:
     def draw(self, progress: int, screen: Surface, cell_size: int) -> None:
         x, y = self.x * cell_size, self.y * cell_size
         rect(screen, BORDER_COLOR, Rect(x, y, cell_size, cell_size))
-        rect(screen, FOOD_COLOR, Rect(x + 1, y + 1, cell_size - 2, cell_size - 2))
+        color = colorCalc(FOOD_COLOR1, FOOD_COLOR2, self.progress / FOOD_MAX_PROGRESS * 2)
+        rect(screen, color, Rect(x + 1, y + 1, cell_size - 2, cell_size - 2))
     @classmethod
     def place(Food, grid_width: int, grid_height: int, exclude_cells: list[Cell]):
         while True:
@@ -92,6 +125,9 @@ class Snake:
     def push_direction(self, direction: tuple[int, int]) -> None:
         self.directions_queue.append(direction)
     def tick(self, percent: int) -> None:
+        for cell in self.cells:
+            cell.tick(percent)
+        self.food.tick(percent)
         if self.dead_acc > 0:
             self.dead_acc -= percent
             if self.dead_acc <= 0:
