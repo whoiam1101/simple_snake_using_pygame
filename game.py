@@ -13,8 +13,6 @@ from constants import (
     FPS,
 )
 
-from constants import BEST_SCORE
-from settings import set_value
 from quit import quit
 from snake import Snake
 
@@ -26,7 +24,6 @@ def game() -> None:
     screen = pygame.display.set_mode((SCREEN_WIDTH(), SCREEN_HEIGHT()))
     font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE())
     running: bool = True
-    score_increment: int = 1
 
     fps = FPS()
     cell_size = CELL_SIZE()
@@ -52,9 +49,9 @@ def game() -> None:
                 if event.key in (pygame.K_DOWN, pygame.K_s):
                     snake.push_direction((0, 1))
 
-        percent = clock.tick(fps) / move_interval
+        progress_step = clock.tick(fps) / move_interval
          
-        snake.tick(percent)
+        snake.tick(progress_step)
 
         screen.fill(SCREEN_BACKGROUND_COLOR)
         snake.draw()
