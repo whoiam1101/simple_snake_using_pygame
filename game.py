@@ -1,40 +1,37 @@
+"""
+This module contains the main game logic.
+"""
 import pygame
 from pygame_menu.font import FONT_8BIT
 
 from colors import SCORE_TEXT_COLOR, SCREEN_BACKGROUND_COLOR
-from constants import (
-    SCREEN_WIDTH,
-    SCREEN_HEIGHT,
-    CELL_SIZE,
-    GRID_WIDTH,
-    GRID_HEIGHT,
-    MOVE_INTERVAL,
-    SCORE_TEXT_SIZE,
-    FPS,
-)
-
-from constants import BEST_SCORE
-from settings import set_value
+from config import CONF, save_config
 from quit import quit
 from snake import Snake
 
-
-
 def game() -> None:
-    # pygame.init()
+    """
+    Initializes and runs the main game loop.
+    """
     pygame.font.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH(), SCREEN_HEIGHT()))
-    font = pygame.font.Font(FONT_8BIT, SCORE_TEXT_SIZE())
-    running: bool = True
-    score_increment: int = 1
 
-    fps = FPS()
-    cell_size = CELL_SIZE()
-    move_interval = MOVE_INTERVAL()
+    screen_width = CONF.game.cell_size * CONF.game.grid_width
+    screen_height = CONF.game.cell_size * CONF.game.grid_height
+    screen = pygame.display.set_mode((screen_width, screen_height))
+
+    score_text_size = CONF.game.cell_size
+    font = pygame.font.Font(FONT_8BIT, score_text_size)
+    running: bool = True
+
+    fps = CONF.game.fps
+    cell_size = CONF.game.cell_size
+    move_interval = CONF.game.move_interval
+    grid_width = CONF.game.grid_width
+    grid_height = CONF.game.grid_height
 
     clock = pygame.time.Clock()
 
-    snake = Snake(GRID_WIDTH(), GRID_HEIGHT(), screen, cell_size)
+    snake = Snake(grid_width, grid_height, screen, cell_size)
 
     while running:
         for event in pygame.event.get():
@@ -52,9 +49,13 @@ def game() -> None:
                 if event.key in (pygame.K_DOWN, pygame.K_s):
                     snake.push_direction((0, 1))
 
-        percent = clock.tick(fps) / move_interval
+        progress_step = clock.tick(fps) / move_interval
          
-        snake.tick(percent)
+        snake.tick(progress_step)
+
+        if snake.score > CONF.game.best_score:
+            CONF.game.best_score = snake.score
+            save_config(CONF)
 
         screen.fill(SCREEN_BACKGROUND_COLOR)
         snake.draw()
