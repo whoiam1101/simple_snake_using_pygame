@@ -9,15 +9,12 @@ from config import CONF
 from theme import theme
 from quit import quit
 from game import game
-from settings import settings
 
-def menu() -> None:
+def menu(screen: pygame.Surface) -> None:
     """
     Creates and displays the main menu.
     """
-    screen_width = CONF.game.cell_size * CONF.game.grid_width
-    screen_height = CONF.game.cell_size * CONF.game.grid_height
-    screen: pygame.Surface = pygame.display.set_mode((screen_width, screen_height))
+    screen_width, screen_height = screen.get_size()
 
     menu_menu: pygame_menu.Menu = pygame_menu.Menu('Snake',
                                                    width=screen_width,
@@ -32,8 +29,7 @@ def menu() -> None:
                         font_size=best_score_text_size,
                         font_color=SCORE_TEXT_COLOR,
                         margin=(0, cell_size))
-    menu_menu.add.button('Play', game)
-    menu_menu.add.button('Settings', settings)
+    menu_menu.add.button('Play', lambda: game(screen))
     menu_menu.add.button('Quit', quit)
 
     menu_menu.mainloop(screen)

@@ -5,19 +5,17 @@ import pygame
 from pygame_menu.font import FONT_8BIT
 
 from colors import SCORE_TEXT_COLOR, SCREEN_BACKGROUND_COLOR
-from config import CONF, save_config
+from config import CONF
 from quit import quit
 from snake import Snake
 
-def game() -> None:
+def game(screen: pygame.Surface) -> None:
     """
     Initializes and runs the main game loop.
     """
     pygame.font.init()
 
-    screen_width = CONF.game.cell_size * CONF.game.grid_width
-    screen_height = CONF.game.cell_size * CONF.game.grid_height
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen_width, screen_height = screen.get_size()
 
     score_text_size = CONF.game.cell_size
     font = pygame.font.Font(FONT_8BIT, score_text_size)
@@ -26,8 +24,8 @@ def game() -> None:
     fps = CONF.game.fps
     cell_size = CONF.game.cell_size
     move_interval = CONF.game.move_interval
-    grid_width = CONF.game.grid_width
-    grid_height = CONF.game.grid_height
+    grid_width = screen_width // cell_size
+    grid_height = screen_height // cell_size
 
     clock = pygame.time.Clock()
 
@@ -55,7 +53,6 @@ def game() -> None:
 
         if snake.score > CONF.game.best_score:
             CONF.game.best_score = snake.score
-            save_config(CONF)
 
         screen.fill(SCREEN_BACKGROUND_COLOR)
         snake.draw()
