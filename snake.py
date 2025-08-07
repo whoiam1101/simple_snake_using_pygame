@@ -294,14 +294,24 @@ class Snake:
 
     def reset(self) -> None:
         """Resets the snake to its initial state."""
-        self.cells: list[Cell] = [Cell.random(self.grid_width, self.grid_height)]
+        # Start snake in the center of the grid instead of random position
+        center_x = self.grid_width // 2
+        center_y = self.grid_height // 2
+        self.cells: list[Cell] = [Cell(center_x, center_y)]
         self.cells[-1].ishead = True
         self.progress = 0.0
         self.dead_acc = 0.0
         self.score = 0
         self.food = Food.place(self.grid_width, self.grid_height, self.cells)
-        self.direction = (0, 0)
+        self.direction = (1, 0)  # Start moving right
         self.directions_queue: list[tuple[int, int]] = []
+    
+    def save_score_and_reset(self) -> None:
+        """Saves the current score to high scores and resets the snake."""
+        from high_scores import add_score
+        if self.score > 0:  # Only save non-zero scores
+            add_score(self.score)
+        self.reset()
 
     def is_dead(self) -> bool:
         """
@@ -334,7 +344,7 @@ class Snake:
         if self.dead_acc > 0:
             self.dead_acc -= progress_step
             if self.dead_acc <= 0:
-                self.reset()
+                self.save_score_and_reset()
         else:
             self.progress += progress_step
             if self.progress >= 1:

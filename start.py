@@ -10,7 +10,9 @@ def main() -> None:
     Initializes pygame and starts the game menu.
     """
     pygame.init()
-    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    pygame.display.set_caption("Snake Game")
+    # Increase board size by 1.5 times
+    screen = pygame.display.set_mode((1200, 900))
     menu(screen)
 
 if __name__ == "__main__":

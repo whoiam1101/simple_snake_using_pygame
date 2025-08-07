@@ -6,8 +6,8 @@ from pygame_menu.font import FONT_8BIT
 
 from colors import SCORE_TEXT_COLOR, SCREEN_BACKGROUND_COLOR
 from config import CONF
-from quit import quit
 from snake import Snake
+from high_scores import add_score
 
 def game(screen: pygame.Surface) -> None:
     """
@@ -30,6 +30,7 @@ def game(screen: pygame.Surface) -> None:
     clock = pygame.time.Clock()
 
     snake = Snake(grid_width, grid_height, screen, cell_size)
+    game_over_processed = False
 
     while running:
         for event in pygame.event.get():
@@ -38,6 +39,9 @@ def game(screen: pygame.Surface) -> None:
                 break
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                    break
                 if event.key in (pygame.K_LEFT, pygame.K_a):
                     snake.push_direction((-1, 0))
                 if event.key in (pygame.K_RIGHT, pygame.K_d):
@@ -60,4 +64,4 @@ def game(screen: pygame.Surface) -> None:
         screen.blit(score_text, (10, 10))
         pygame.display.flip()
 
-    quit()
+    # Return to menu instead of quitting

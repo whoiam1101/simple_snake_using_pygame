@@ -14,4 +14,4 @@ theme: Theme = Theme(background_color=SCREEN_BACKGROUND_COLOR,
                      selection_color="green",
                      title=False,
                      widget_font=FONT_8BIT,
-                     widget_font_size=CONF.game.cell_size // 2)
+                     widget_font_size=max(20, CONF.game.cell_size // 2))
