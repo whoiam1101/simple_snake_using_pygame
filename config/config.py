@@ -58,23 +58,36 @@ def set_difficulty(selected_difficulty: Sequence[Sequence[str]], *args, **kwargs
     """
     Sets the move interval based on the selected difficulty.
     """
+    if not selected_difficulty or not selected_difficulty[0]:
+        return
     difficulty_str = selected_difficulty[0][0].lower().replace(" ", "_")
-    move_interval = CONF.difficulty[difficulty_str]
-    CONF.game.move_interval = move_interval
-    save_config(CONF)
+    if hasattr(CONF.difficulty, difficulty_str):
+        move_interval = CONF.difficulty[difficulty_str]
+        CONF.game.move_interval = move_interval
+        save_config(CONF)
 
 def set_cell_size(selected_value: Sequence[Sequence[str]], *args, **kwargs) -> None:
     """
     Sets the cell size in the configuration.
     """
-    CONF.game.cell_size = int(selected_value[0][0])
-    save_config(CONF)
+    if not selected_value or not selected_value[0]:
+        return
+    try:
+        CONF.game.cell_size = int(selected_value[0][0])
+        save_config(CONF)
+    except (ValueError, IndexError):
+        pass
 
 def set_grid_size(selected_value: Sequence[Sequence[str]], *args, **kwargs) -> None:
     """
     Sets the grid width and height in the configuration.
     """
-    size = int(selected_value[0][0])
-    CONF.game.grid_width = size
-    CONF.game.grid_height = size
-    save_config(CONF)
+    if not selected_value or not selected_value[0]:
+        return
+    try:
+        size = int(selected_value[0][0])
+        CONF.game.grid_width = size
+        CONF.game.grid_height = size
+        save_config(CONF)
+    except (ValueError, IndexError):
+        pass

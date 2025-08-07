@@ -38,9 +38,9 @@ def settings() -> None:
     possible_cell_size_values = selector_values_map(CONF.menu.cell_size_values)
     possible_grid_size_values = selector_values_map(CONF.menu.grid_size_values)
 
-    settings_menu.add.selector('Difficulty', possible_difficulty_values, onchange=set_difficulty)
-    settings_menu.add.selector('Cell size',  possible_cell_size_values,  onchange=set_cell_size)
-    settings_menu.add.selector('Grid size',  possible_grid_size_values,  onchange=set_grid_size)
+    settings_menu.add.selector('Difficulty', possible_difficulty_values, onchange=set_difficulty, keyboard_selection=False)
+    settings_menu.add.selector('Cell size',  possible_cell_size_values,  onchange=set_cell_size, keyboard_selection=False)
+    settings_menu.add.selector('Grid size',  possible_grid_size_values,  onchange=set_grid_size, keyboard_selection=False)
     settings_menu.add.button('Back',         lambda: settings_menu.disable())
 
     settings_menu.mainloop(screen)
