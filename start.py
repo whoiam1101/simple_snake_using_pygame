@@ -10,7 +10,8 @@ def main() -> None:
     Initializes pygame and starts the game menu.
     """
     pygame.init()
-    menu()
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    menu(screen)
 
 if __name__ == "__main__":
     main()

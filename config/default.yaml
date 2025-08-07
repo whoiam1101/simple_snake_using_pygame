@@ -2,21 +2,12 @@
 game:
   fps: 60
   move_interval: 123
-  cell_size: 32
+  cell_size: 64
   grid_width: 16
   grid_height: 16
   best_score: 0
 
-# Difficulty levels
-difficulty:
-  easy: 300
-  medium: 222
-  hard: 123
-  very_hard: 100
-  impossible: 75
-
 # Menu settings
 menu:
-  difficulty_values: ["EASY", "MEDIUM", "HARD", "VERY HARD", "IMMPOSSIBLE"]
   cell_size_values: [8, 16, 32, 48, 64]
   grid_size_values: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
