@@ -1,4 +1,5 @@
 """
+author: whoiam1101
 This module creates the main menu for the game.
 """
 
