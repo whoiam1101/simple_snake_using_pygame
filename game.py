@@ -1,13 +1,14 @@
 """
 This module contains the main game logic.
 """
+
 import pygame
 from pygame_menu.font import FONT_8BIT
 
 from colors import SCORE_TEXT_COLOR, SCREEN_BACKGROUND_COLOR
 from config import CONF
 from snake import Snake
-from high_scores import add_score
+
 
 def game(screen: pygame.Surface) -> None:
     """
@@ -52,7 +53,7 @@ def game(screen: pygame.Surface) -> None:
                     snake.push_direction((0, 1))
 
         progress_step = clock.tick(fps) / move_interval
-         
+
         snake.tick(progress_step)
 
         if snake.score > CONF.game.best_score:
@@ -60,7 +61,7 @@ def game(screen: pygame.Surface) -> None:
 
         screen.fill(SCREEN_BACKGROUND_COLOR)
         snake.draw()
-        score_text = font.render(f'{snake.score}', True, SCORE_TEXT_COLOR)
+        score_text = font.render(f"{snake.score}", True, SCORE_TEXT_COLOR)
         screen.blit(score_text, (10, 10))
         pygame.display.flip()
 
