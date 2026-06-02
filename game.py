@@ -31,7 +31,6 @@ def game(screen: pygame.Surface) -> None:
     clock = pygame.time.Clock()
 
     snake = Snake(grid_width, grid_height, screen, cell_size)
-    game_over_processed = False
 
     while running:
         for event in pygame.event.get():
